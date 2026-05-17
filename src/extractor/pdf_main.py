@@ -7,7 +7,7 @@ from unstructured_client.models.errors import SDKError
 from unstructured.partition.html import partition_html
 #from unstructured.partition.pptx import partition_pptx
 from unstructured.staging.base import dict_to_elements, elements_to_json
-from modules.api_auth import get_client
+from utils.api_auth import get_client
 
 from IPython.display import Image
 import requests 
