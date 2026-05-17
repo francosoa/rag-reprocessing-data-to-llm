@@ -1,28 +1,19 @@
 from IPython.display import JSON
 
 import json
-import os 
-from dotenv import load_dotenv
-from unstructured_client import UnstructuredClient
 from unstructured_client.models import shared, operations
 from unstructured_client.models.errors import SDKError
 
 from unstructured.partition.html import partition_html
 #from unstructured.partition.pptx import partition_pptx
 from unstructured.staging.base import dict_to_elements, elements_to_json
+from modules.api_auth import get_client
 
 from IPython.display import Image
 import requests 
 
-load_dotenv()
-
-UNSTRUCTURED_API_KEY = os.getenv("UNSTRUCTURED_API_KEY")
-SERVER_URL = os.getenv("SERVER_URL")
-print(f"API Key: {UNSTRUCTURED_API_KEY}")
-client = UnstructuredClient(
-    api_key_auth=UNSTRUCTURED_API_KEY
-)
-
+client = get_client()
+    
 #Exemplo com HTML:
 url_text = "https://medium.com/@cadacidente/tenho-medo-de-me-apaixonar-840ea8e7a4c0"
 response = requests.get(url_text)
