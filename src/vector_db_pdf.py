@@ -1,7 +1,7 @@
 # Warning control
 import warnings
 import logging
-from utils.api_auth import get_client
+from utils.config import get_client
 import json
 from IPython.display import JSON
 

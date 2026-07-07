@@ -1,13 +1,14 @@
 import json
 from unstructured_client.models import shared, operations
 from unstructured_client.models.errors import SDKError
-from chunking import chunk_documents
+from chunking import chunk_documents, create_vector_store
 from unstructured.partition.html import partition_html
 #from unstructured.partition.pptx import partition_pptx
 from unstructured.staging.base import dict_to_elements, elements_to_json
-from utils.api_auth import get_client
+from utils.config import get_client
 from langchain_core.documents import Document
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_openai import OpenAIEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings #Cria embeddings localmente
 #from IPython.display import Image
 import requests 
 from collections import defaultdict
@@ -36,6 +37,11 @@ def create_partition_params(files: shared.Files, languages:list) -> shared.Parti
         pdf_infer_table_structure=True,
         skip_infer_table_types=[],
         languages=languages,
+    )
+
+def create_embeddings():
+    return HuggingFaceEmbeddings(
+    model_name="intfloat/multilingual-e5-base"
     )
 
 
@@ -191,3 +197,16 @@ documents = (
 )
 
 chunks = chunk_documents(documents)
+
+filtered_chunks = [
+    chunk
+    for chunk in chunks
+    if len(chunk.page_content.strip()) >= 50
+]
+
+embeddings = create_embeddings()
+
+vector_store = create_vector_store(
+    filtered_chunks,
+    embeddings
+)
